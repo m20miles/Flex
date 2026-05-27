@@ -20,94 +20,157 @@
   --mono: 'Share Tech Mono', monospace; --title: 'Bebas Neue', sans-serif;
 }
 html, body { background: var(--bg); color: #fff; font-family: var(--mono); -webkit-tap-highlight-color: transparent; overscroll-behavior: none; }
-body { display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 0 0 40px; }
-.header { width: 100%; display: flex; align-items: center; justify-content: center; padding: 18px 24px 14px; background: var(--bg); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 10; }
-.header h1 { font-family: var(--title); font-size: 2rem; letter-spacing: .3em; color: #fff; }
-.live-clock { width: 100%; text-align: center; font-size: .75rem; color: var(--dim); padding: 10px 0 6px; letter-spacing: .15em; }
-.card { width: calc(100% - 32px); max-width: 480px; margin: 10px 0 0; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 16px 20px 14px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
-.card-label { font-size: .65rem; letter-spacing: .25em; text-transform: uppercase; }
-.card-time { font-size: 3.2rem; line-height: 1; letter-spacing: .05em; }
-.card-input { flex-direction: row; justify-content: space-between; align-items: center; padding: 14px 12px; }
-.card-input .center { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
-.btn-adj { width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--ingresso); background: transparent; color: var(--ingresso); font-size: 1.4rem; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; -webkit-tap-highlight-color: transparent; }
+body { display: flex; flex-direction: column; align-items: center; height: 100dvh; overflow: hidden; }
+
+/* BANNER con FLEX sovrapposto */
+.banner {
+  width: 100%;
+  max-width: 480px;
+  height: 240px;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+.banner img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center 25%;
+  display: block;
+}
+.banner::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, rgba(10,10,10,0.15) 0%, rgba(10,10,10,0.55) 100%);
+}
+.banner-title {
+  position: absolute; bottom: 8px; left: 0; right: 0;
+  text-align: center;
+  font-family: var(--title);
+  font-size: 2.2rem;
+  letter-spacing: .35em;
+  color: #fff;
+  z-index: 2;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+}
+
+/* Orologio */
+.live-clock { width: 100%; text-align: center; font-size: .7rem; color: var(--dim); padding: 5px 0 3px; letter-spacing: .15em; flex-shrink: 0; }
+
+/* Scroll area per le card */
+.cards-area {
+  width: 100%;
+  max-width: 480px;
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 16px 8px;
+  gap: 9px;
+}
+
+.card { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 12px 16px 11px; display: flex; flex-direction: column; align-items: center; gap: 2px; flex-shrink: 0; }
+.card-label { font-size: .6rem; letter-spacing: .25em; text-transform: uppercase; }
+.card-time { font-size: 2.7rem; line-height: 1; letter-spacing: .04em; }
+
+.card-input { flex-direction: row; justify-content: space-between; align-items: center; padding: 8px 10px; }
+.card-input .center { display: flex; flex-direction: column; align-items: center; gap: 2px; flex: 1; }
+
+.btn-adj { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--ingresso); background: transparent; color: var(--ingresso); font-size: 1.3rem; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; -webkit-tap-highlight-color: transparent; }
 .btn-adj:active { background: rgba(245,166,35,.15); }
-.sep { width: calc(100% - 32px); max-width: 480px; height: 1px; background: var(--border); margin: 8px 0 0; }
+
+.sep { width: 100%; height: 1px; background: var(--border); flex-shrink: 0; }
+
 .c-ingresso { color: var(--ingresso); }
 .c-buono    { color: var(--buono); }
 .c-neg      { color: var(--neg); }
 .c-orario   { color: var(--orario); }
 .c-pos      { color: var(--pos); }
 .c-personale{ color: var(--personale); }
-.progress-wrap { width: calc(100% - 32px); max-width: 480px; margin: 14px 0 0; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+
+.progress-wrap { width: 100%; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; flex-shrink: 0; }
 .progress-bar { height: 100%; background: linear-gradient(90deg, var(--neg), var(--orario), var(--pos)); border-radius: 2px; transition: width 1s linear; width: 0%; }
-.status-badge { width: calc(100% - 32px); max-width: 480px; margin: 10px 0 0; padding: 10px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; font-size: .7rem; letter-spacing: .12em; text-align: center; color: var(--dim); min-height: 38px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+
+.status-badge { width: 100%; padding: 7px 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; font-size: .65rem; letter-spacing: .1em; text-align: center; color: var(--dim); display: flex; align-items: center; justify-content: center; gap: 8px; flex-shrink: 0; }
 .status-badge .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+
 .card-personale { border-color: rgba(156,39,176,.3); display: none; }
 .card-personale.visible { display: flex; }
-.card-note { font-size: .6rem; color: var(--dim); letter-spacing: .12em; text-align: center; line-height: 1.5; }
-.btn-now { margin-top: 16px; padding: 10px 28px; border: 1px solid var(--border); background: transparent; color: var(--dim); font-family: var(--mono); font-size: .65rem; letter-spacing: .2em; text-transform: uppercase; border-radius: 2px; cursor: pointer; }
+.card-note { font-size: .55rem; color: var(--dim); letter-spacing: .1em; text-align: center; line-height: 1.4; }
+
+.btn-now { width: 100%; padding: 8px; border: 1px solid var(--border); background: transparent; color: var(--dim); font-family: var(--mono); font-size: .6rem; letter-spacing: .2em; text-transform: uppercase; border-radius: 2px; cursor: pointer; flex-shrink: 0; }
 .btn-now:active { background: var(--surface); color: #fff; border-color: #555; }
+
 @keyframes pulse-glow { 0%,100%{opacity:1} 50%{opacity:.55} }
 .next-milestone .card-time { animation: pulse-glow 2s ease-in-out infinite; }
+
 .time-picker-wrap { position: relative; cursor: pointer; }
 .time-picker-wrap input[type="time"] { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; font-size: 16px; }
 </style>
 </head>
 <body>
 
-<div class="header"><h1>FLEX</h1></div>
+<!-- Banner con titolo sovrapposto -->
+<div class="banner">
+  <img src="banner.jpg" alt="">
+  <span class="banner-title">FLEX</span>
+</div>
+
 <div class="live-clock" id="liveClock">--:--:--</div>
 
-<div class="card card-input">
-  <button class="btn-adj" id="btnMinus">&#8722;</button>
-  <div class="center">
-    <span class="card-label c-ingresso">INGRESSO</span>
-    <div class="time-picker-wrap">
-      <span class="card-time c-ingresso" id="dispIngresso">--:--</span>
-      <input type="time" id="timePicker">
+<div class="cards-area">
+
+  <div class="card card-input">
+    <button class="btn-adj" id="btnMinus">&#8722;</button>
+    <div class="center">
+      <span class="card-label c-ingresso">INGRESSO</span>
+      <div class="time-picker-wrap">
+        <span class="card-time c-ingresso" id="dispIngresso">--:--</span>
+        <input type="time" id="timePicker">
+      </div>
     </div>
+    <button class="btn-adj" id="btnPlus">&#43;</button>
   </div>
-  <button class="btn-adj" id="btnPlus">&#43;</button>
+
+  <div class="sep"></div>
+
+  <div class="card" id="cardBuono">
+    <span class="card-label c-buono">Buono pasto</span>
+    <span class="card-time c-buono" id="dispBuono">--:--</span>
+  </div>
+
+  <div class="card" id="cardNeg">
+    <span class="card-label c-neg">flex NEG</span>
+    <span class="card-time c-neg" id="dispNeg">--:--</span>
+  </div>
+
+  <div class="card" id="cardOrario">
+    <span class="card-label c-orario">ORARIO</span>
+    <span class="card-time c-orario" id="dispOrario">--:--</span>
+  </div>
+
+  <div class="card" id="cardPos">
+    <span class="card-label c-pos">flex POS</span>
+    <span class="card-time c-pos" id="dispPos">--:--</span>
+  </div>
+
+  <div class="card card-personale" id="cardPersonale">
+    <span class="card-label c-personale">presenza per motivi personali</span>
+    <span class="card-time c-personale" id="dispPersonale">0:00</span>
+    <span class="card-note" id="notePersonale"></span>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <div class="status-badge">
+    <span class="dot" id="statusDot" style="background:#444"></span>
+    <span id="statusText">imposta l'orario di ingresso</span>
+  </div>
+
+  <button class="btn-now" id="btnNow">USA ORA ATTUALE</button>
+
 </div>
-
-<div class="sep"></div>
-
-<div class="card" id="cardBuono">
-  <span class="card-label c-buono">Buono pasto</span>
-  <span class="card-time c-buono" id="dispBuono">--:--</span>
-</div>
-
-<div class="card" id="cardNeg">
-  <span class="card-label c-neg">flex NEG</span>
-  <span class="card-time c-neg" id="dispNeg">--:--</span>
-</div>
-
-<div class="card" id="cardOrario">
-  <span class="card-label c-orario">ORARIO</span>
-  <span class="card-time c-orario" id="dispOrario">--:--</span>
-</div>
-
-<div class="card" id="cardPos">
-  <span class="card-label c-pos">flex POS</span>
-  <span class="card-time c-pos" id="dispPos">--:--</span>
-</div>
-
-<div class="card card-personale" id="cardPersonale">
-  <span class="card-label c-personale">presenza per motivi personali</span>
-  <span class="card-time c-personale" id="dispPersonale">0:00</span>
-  <span class="card-note" id="notePersonale"></span>
-</div>
-
-<div class="progress-wrap">
-  <div class="progress-bar" id="progressBar"></div>
-</div>
-
-<div class="status-badge">
-  <span class="dot" id="statusDot" style="background:#444"></span>
-  <span id="statusText">imposta l'orario di ingresso</span>
-</div>
-
-<button class="btn-now" id="btnNow">USA ORA ATTUALE</button>
 
 <script>
 var INIZIO = 7*60+30, FINE = 18*60+30;
@@ -127,10 +190,15 @@ var bar         = document.getElementById('progressBar');
 var sTxt        = document.getElementById('statusText');
 var sDot        = document.getElementById('statusDot');
 var clock       = document.getElementById('liveClock');
-var cardMap     = { buono: document.getElementById('cardBuono'), neg: document.getElementById('cardNeg'), orario: document.getElementById('cardOrario'), pos: document.getElementById('cardPos') };
+var cardMap = {
+  buono:  document.getElementById('cardBuono'),
+  neg:    document.getElementById('cardNeg'),
+  orario: document.getElementById('cardOrario'),
+  pos:    document.getElementById('cardPos')
+};
 
 function fmt(m) {
-  var t = ((m%1440)+1440)%1440;
+  var t=((m%1440)+1440)%1440;
   return String(Math.floor(t/60)).padStart(2,'0')+':'+String(t%60).padStart(2,'0');
 }
 function dur(m) { return Math.floor(m/60)+':'+String(m%60).padStart(2,'0'); }
@@ -138,87 +206,83 @@ function nowM() { var d=new Date(); return d.getHours()*60+d.getMinutes(); }
 function nowS() { var d=new Date(); return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')+':'+String(d.getSeconds()).padStart(2,'0'); }
 
 function render() {
-  if (ingressoMin === null) return;
-  var now = nowM();
-  var start = Math.max(ingressoMin, INIZIO);
-  var mpAnticipo = ingressoMin < INIZIO ? INIZIO - ingressoMin : 0;
-  var buono  = start + BUONO;
-  var neg    = start + NEG;
-  var orario = start + STD;
-  var pos    = Math.min(start + POS, FINE);
+  if (ingressoMin===null) return;
+  var now=nowM();
+  var start=Math.max(ingressoMin,INIZIO);
+  var mpAnticipo=ingressoMin<INIZIO?INIZIO-ingressoMin:0;
+  var buono=start+BUONO, neg=start+NEG, orario=start+STD, pos=Math.min(start+POS,FINE);
 
-  elIngresso.textContent = fmt(ingressoMin);
-  elBuono.textContent    = fmt(buono);
-  elNeg.textContent      = fmt(neg);
-  elOrario.textContent   = fmt(orario);
-  elPos.textContent      = fmt(pos);
-  picker.value           = fmt(ingressoMin);
+  elIngresso.textContent=fmt(ingressoMin);
+  elBuono.textContent=fmt(buono);
+  elNeg.textContent=fmt(neg);
+  elOrario.textContent=fmt(orario);
+  elPos.textContent=fmt(pos);
+  picker.value=fmt(ingressoMin);
 
-  bar.style.width = Math.min(100, Math.max(0, (now-start)/STD*100))+'%';
+  bar.style.width=Math.min(100,Math.max(0,(now-start)/STD*100))+'%';
 
-  var mpTardivi = now > FINE ? now - FINE : 0;
-  var mpTot = mpAnticipo + mpTardivi;
-  if (mpTot > 0) {
+  var mpTardivi=now>FINE?now-FINE:0;
+  var mpTot=mpAnticipo+mpTardivi;
+  if (mpTot>0) {
     cardPers.classList.add('visible');
-    elPersonale.textContent = dur(mpTot);
-    var nota = [];
-    if (mpAnticipo > 0) nota.push('anticipato '+dur(mpAnticipo)+' prima delle 07:30');
-    if (mpTardivi  > 0) nota.push('oltre le 18:30 da '+dur(mpTardivi));
-    elNote.textContent = nota.join(' \u00b7 ');
+    elPersonale.textContent=dur(mpTot);
+    var nota=[];
+    if (mpAnticipo>0) nota.push('anticipato '+dur(mpAnticipo)+' prima delle 07:30');
+    if (mpTardivi>0)  nota.push('oltre le 18:30 da '+dur(mpTardivi));
+    elNote.textContent=nota.join(' \u00b7 ');
   } else {
     cardPers.classList.remove('visible');
   }
 
   Object.values(cardMap).forEach(function(c){ c.classList.remove('next-milestone'); });
-  var col, msg, next;
-  if (now >= FINE) {
+  var col,msg,next;
+  if (now>=FINE) {
     col='#9c27b0'; msg='finestra oraria chiusa (18:30)'; next=null;
-  } else if (now < buono) {
+  } else if (now<buono) {
     col='#888'; msg='buono pasto tra '+(buono-now)+'min'; next=cardMap.buono;
-  } else if (now < neg) {
+  } else if (now<neg) {
     col='#e35050'; msg='flex NEG tra '+(neg-now)+'min'; next=cardMap.neg;
-  } else if (now < orario) {
+  } else if (now<orario) {
     col='#f5a623'; msg='orario standard tra '+(orario-now)+'min'; next=cardMap.orario;
-  } else if (now < pos) {
+  } else if (now<pos) {
     col='#4caf50'; msg='flex POS tra '+(pos-now)+'min'; next=cardMap.pos;
   } else {
     col='#4caf50';
-    var ex=now-orario, hh=Math.floor(ex/60), mm=ex%60;
+    var ex=now-orario,hh=Math.floor(ex/60),mm=ex%60;
     msg=(hh>0?'+'+hh+'h'+String(mm).padStart(2,'0')+'m':'+'+mm+'min')+' \u2014 flessibilit\u00e0 positiva totale';
     next=null;
   }
   if (next) next.classList.add('next-milestone');
-  sDot.style.background = col;
-  sTxt.textContent = msg;
+  sDot.style.background=col;
+  sTxt.textContent=msg;
 }
 
-function tick() { clock.textContent=nowS(); render(); }
-setInterval(tick, 1000); tick();
+function tick(){ clock.textContent=nowS(); render(); }
+setInterval(tick,1000); tick();
 
-function setNow() { ingressoMin=nowM(); render(); }
-document.getElementById('btnNow').addEventListener('click', setNow);
-
-document.getElementById('btnMinus').addEventListener('click', function(){ if(ingressoMin===null)setNow(); ingressoMin--; render(); });
-document.getElementById('btnPlus').addEventListener('click',  function(){ if(ingressoMin===null)setNow(); ingressoMin++; render(); });
+function setNow(){ ingressoMin=nowM(); render(); }
+document.getElementById('btnNow').addEventListener('click',setNow);
+document.getElementById('btnMinus').addEventListener('click',function(){ if(ingressoMin===null)setNow(); ingressoMin--; render(); });
+document.getElementById('btnPlus').addEventListener('click',function(){ if(ingressoMin===null)setNow(); ingressoMin++; render(); });
 
 var iv=null;
 function sp(d){ if(ingressoMin===null)setNow(); ingressoMin+=d; render(); iv=setInterval(function(){ ingressoMin+=d; render(); },120); }
 function ep(){ clearInterval(iv); }
-var bm=document.getElementById('btnMinus'), bp=document.getElementById('btnPlus');
-bm.addEventListener('mousedown',  function(){ sp(-1); });
-bm.addEventListener('touchstart', function(e){ e.preventDefault(); sp(-1); },{passive:false});
-bp.addEventListener('mousedown',  function(){ sp(1); });
-bp.addEventListener('touchstart', function(e){ e.preventDefault(); sp(1); },{passive:false});
+var bm=document.getElementById('btnMinus'),bp=document.getElementById('btnPlus');
+bm.addEventListener('mousedown',function(){ sp(-1); });
+bm.addEventListener('touchstart',function(e){ e.preventDefault(); sp(-1); },{passive:false});
+bp.addEventListener('mousedown',function(){ sp(1); });
+bp.addEventListener('touchstart',function(e){ e.preventDefault(); sp(1); },{passive:false});
 ['mouseup','mouseleave','touchend','touchcancel'].forEach(function(ev){ bm.addEventListener(ev,ep); bp.addEventListener(ev,ep); });
 
-picker.addEventListener('change', function(){
+picker.addEventListener('change',function(){
   if(!picker.value) return;
   var p=picker.value.split(':');
   ingressoMin=parseInt(p[0])*60+parseInt(p[1]);
   render();
 });
 
-if(new Date().getHours()>=7 && new Date().getHours()<10) setNow();
+if(new Date().getHours()>=7&&new Date().getHours()<10) setNow();
 </script>
 </body>
 </html>
